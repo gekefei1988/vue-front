@@ -1,7 +1,4 @@
 import {
-  login,
-  logout,
-  getUserInfo,
   getMessage,
   getContentByMsgId,
   hasRead,
@@ -9,6 +6,7 @@ import {
   restoreTrash,
   getUnreadCount
 } from '@/api/user'
+import { login, logout,getUserInfo } from '@/api/login/login-api'
 import { setToken, getToken } from '@/libs/util'
 
 export default {
@@ -82,8 +80,10 @@ export default {
           password
         }).then(res => {
           const data = res.data
-          if(data && data.status == 'ok'){
-            commit('setToken', data.token)
+          if(data && data.success){
+            commit('setToken', data.body.token)
+            // 清空tag标签内容
+            commit('setTagNavList', [])
           }
           resolve(res)
         }).catch(err => {
@@ -94,9 +94,11 @@ export default {
     // 退出登录
     handleLogOut ({ state, commit }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
+        logout().then(() => {
           commit('setToken', '')
           commit('setAccess', [])
+          // 清空tag标签内容
+          commit('setTagNavList', [])
           resolve()
         }).catch(err => {
           reject(err)
@@ -114,8 +116,8 @@ export default {
           getUserInfo(state.token).then(res => {
             const data = res.data
             commit('setAvatar', data.avatar)
-            commit('setUserName', data.name)
-            commit('setUserId', data.user_id)
+            commit('setUserName', data.userName)
+            commit('setUserId', data.userId)
             commit('setAccess', data.access)
             commit('setHasGetInfo', true)
             resolve(data)

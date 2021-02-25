@@ -29,11 +29,13 @@ export default {
     ]),
     handleSubmit ({ userName, password }) {
       this.handleLogin({ userName, password }).then(res => {
-        if (res.data.status === 'ok') {
+        if (res.data.success) {
           this.getUserInfo().then(res => {
-            this.$router.push({
-              name: this.$config.homeName
-            })
+            if(res){
+              this.$router.push({
+                name: this.$config.homeName
+              })
+            }
           })
         } else {
           this.$Message.error(res.data.msg)
