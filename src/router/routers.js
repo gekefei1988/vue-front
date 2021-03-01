@@ -55,6 +55,29 @@ export const otherRouter = [
     ]
   },
   {
+    name: 'sys_settings',
+    path: '/sys_settings',
+    meta: {
+      hideInMenu: false,
+      notCache: false,
+      showAlways: true,
+      title: '系统设置',
+      icon: 'md-settings',
+    },
+    component: Main,
+    children: [{
+      name: 'sys_menu',
+      path: 'sys_menu',
+      meta: {
+        hideInMenu: false,
+        notCache: false,
+        title: '菜单管理',
+        icon: 'md-menu',
+      },
+      component: () => import('@/view/sys-manage/menu/index.vue')
+    }]
+  },
+  {
     path: '/401',
     name: 'error_401',
     meta: {
@@ -88,7 +111,7 @@ let menuDatas = jquery.ajax({
 
 let menuDatasApi = filterAsyncRouter(menuDatas)
 
-// 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
+//作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 export const routes = [...menuDatasApi, ...otherRouter]
 
 export default routes

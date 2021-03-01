@@ -1,7 +1,8 @@
 import Cookies from 'js-cookie'
 // cookie保存的天数
 import config from '@/config'
-import { forEach, hasOneOf, objEqual } from '@/libs/tools'
+// import { forEach, hasOneOf, objEqual } from '@/libs/tools'
+import { forEach, hasOneOf } from '@/libs/tools'
 const { title, cookieExpires, useI18n } = config
 
 export const TOKEN_KEY = 'token'
@@ -32,6 +33,9 @@ const showThisMenuEle = (item, access) => {
  */
 export const getMenuByRouter = (list, access) => {
   let res = []
+  if (!list) {
+    return
+  }
   forEach(list, item => {
     if (!item.meta || (item.meta && !item.meta.hideInMenu)) {
       let obj = {
@@ -323,11 +327,12 @@ export const showByAccess = (access, canViewAccess) => {
  * @param {*} route2 路由对象
  */
 export const routeEqual = (route1, route2) => {
-  const params1 = route1.params || {}
-  const params2 = route2.params || {}
-  const query1 = route1.query || {}
-  const query2 = route2.query || {}
-  return (route1.name === route2.name) && objEqual(params1, params2) && objEqual(query1, query2)
+  // const params1 = route1.params || {}
+  // const params2 = route2.params || {}
+  // const query1 = route1.query || {}
+  // const query2 = route2.query || {}
+  // return (route1.name === route2.name) && objEqual(params1, params2) && objEqual(query1, query2)
+  return (route1.name === route2.name)
 }
 
 /**
@@ -396,4 +401,143 @@ export const setTitle = (routeItem, vm) => {
   const pageTitle = showTitle(handledRoute, vm)
   const resTitle = pageTitle ? `${title} - ${pageTitle}` : title
   window.document.title = resTitle
+}
+
+/**
+ * @description 格式化日期
+ * @param {date} 日期
+ * @param {fmt} 格式
+ */
+export const formatDate = (date, fmt) => {
+  if (date === null || date === undefined) {
+    return ''
+  }
+
+  let o = {
+    'M+': date.getMonth() + 1,
+    'd+': date.getDate(),
+    'h+': date.getHours(),
+    'm+': date.getMinutes(),
+    's+': date.getSeconds(),
+    'S': date.getMilliseconds()
+  }
+  if (/(y+)/.test(fmt)) {
+    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
+  }
+  for (let k in o) {
+    if (new RegExp('(' + k + ')').test(fmt)) {
+      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+    }
+  }
+  return fmt
+}
+
+/**
+ * @description 返回静态服务器地址
+ * @param {fileUrl} 相对地址
+ */
+export const getFileUrl = (fileUrl) => {
+  if (fileUrl == null || fileUrl === undefined) {
+    return ''
+  } else if (fileUrl.indexOf('/') !== 0) {
+    fileUrl = '/' + fileUrl
+  }
+
+  return config.staticServer + fileUrl
+}
+
+/**
+ * @description 返回默认头像
+ */
+export const getDefaultAvatar = () => {
+  return config.staticServer + config.defaultAvatar
+}
+
+/*
+* 格式化数字显示方式
+* 用法
+* formatNumber(12345.999,'#,##0.00');
+* formatNumber(12345.999,'#,##0.##');
+* formatNumber(123,'000000');
+* @param num
+* @param pattern
+*/
+export const formatNumber = (num, pattern) => {
+  let fmtarr = pattern ? pattern.split('.') : ['']
+
+  // 四舍五入处理
+  let decimals = (fmtarr.length > 1 ? fmtarr[1].length : 0)
+
+  num = Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals)
+
+  // 值->字符串->数组
+  let strarr = num ? num.toString().split('.') : ['0']
+  let retstr = ''
+
+  // 整数部分
+  let str = strarr[0]
+  let fmt = fmtarr[0]
+  let i = str.length - 1
+  let comma = false
+  for (let f = fmt.length - 1; f >= 0; f--) {
+    switch (fmt.substr(f, 1)) {
+      case '#':
+        if (i >= 0) {
+          retstr = str.substr(i--, 1) + retstr
+        }
+        break
+      case '0':
+        if (i >= 0) {
+          retstr = str.substr(i--, 1) + retstr
+        } else {
+          retstr = '0' + retstr
+        }
+        break
+      case ',':
+        comma = true
+        retstr = ',' + retstr
+        break
+    }
+  }
+  // 整数字符串替换格式后剩余字符串处理
+  if (i >= 0) {
+    if (comma) {
+      let l = str.length
+      for (; i >= 0; i--) {
+        retstr = str.substr(i, 1) + retstr
+        if (i > 0 && ((l - i) % 3) === 0) {
+          retstr = ',' + retstr
+        }
+      }
+    } else {
+      retstr = str.substr(0, i + 1) + retstr
+    }
+  }
+
+  retstr = retstr + '.'
+
+  // 处理小数部分
+  str = strarr.length > 1 ? strarr[1] : ''
+  fmt = fmtarr.length > 1 ? fmtarr[1] : ''
+  i = 0
+  for (let f = 0; f < fmt.length; f++) {
+    switch (fmt.substr(f, 1)) {
+      case '#':
+        if (i < str.length) {
+          retstr += str.substr(i++, 1)
+        }
+        break
+      case '0':
+        if (i < str.length) {
+          retstr += str.substr(i++, 1)
+        } else {
+          retstr += '0'
+        }
+        break
+    }
+  }
+
+  // 返回
+  // 1.去掉开头的逗号（，）和加号（+）；2.结尾的小数点（.)
+  return retstr.replace(/^,+/, '').replace(/\.$/, '')
 }
