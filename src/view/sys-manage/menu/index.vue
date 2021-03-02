@@ -107,7 +107,7 @@ export default {
         },
         {
           title: '显示顺序',
-          key: 'orderNum',
+          key: 'displayOrder',
           sortable: 'custom',
           width: 130,
           align: 'right'
@@ -122,22 +122,22 @@ export default {
             return h('span', formatDate(new Date(params.row.updateDate), 'yyyy-MM-dd hh:mm'))
           }
         },
-				 {
-				  title: '状态',
-				  key: 'status',
-				  sortable: 'custom',
-				  width: 100,
-				  align: 'center',
-				  render: (h, params) => {
-				    let color = params.row.status === '0' ? 'success' : 'error'
-				    let text = params.row.status === '0' ? '启用' : '停用'
-				    return h('Tag', {
-				      props: {
-				        color: color
-				      }
-				    }, text)
-				  }
-				},
+        {
+          title: '状态',
+          key: 'status',
+          sortable: 'custom',
+          width: 100,
+          align: 'center',
+          render: (h, params) => {
+            let color = params.row.status === '0' ? 'success' : 'error'
+            let text = params.row.status === '0' ? '启用' : '停用'
+            return h('Tag', {
+              props: {
+                color: color
+              }
+            }, text)
+          }
+        },
         {
           title: '操作',
           key: 'id',
@@ -182,7 +182,7 @@ export default {
                 style: 'margin-left:5px',
                 on: {
                   click: () => {
-                    this.handleDelete(params.row.menuId)
+                    this.handleDelete(params.row.id)
                   }
                 }
               }, '删除')
@@ -320,10 +320,10 @@ export default {
     editObject (oper, row) {
       if (oper === 'edit') {
         this.details.isEdit = true
-        this.details.objectId = row.menuId
+        this.details.objectId = row.id
       } else if (oper === 'view') {
         this.details.isEdit = false
-        this.details.objectId = row.menuId
+        this.details.objectId = row.id
       } else {
         this.details.isEdit = true
         this.details.parentId = this.searchParams.parentId
@@ -346,7 +346,7 @@ export default {
       this.details.objectId = ''
       this.details.parentId = ''
       this.details.modalShow = false
-    },
+    }
   },
   mounted () {
     this.search()

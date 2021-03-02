@@ -42,6 +42,7 @@ export const filterAsyncRouter = (asyncRouterMap) => {
     return null
   }
   const accessedRouters = asyncRouterMap.filter(route => {
+    debugger
     if (route.component) {
       if (route.component === 'Main') { // Main组件特殊处理
         route.component = Main

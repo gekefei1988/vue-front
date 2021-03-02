@@ -7,117 +7,80 @@
       @on-cancel="detailsCancel"
       :mask-closable="false">
       <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="120" class="form-max">
-        <Collapse accordion v-model="details.collPanel">
-          <Panel name="1">
-            基础信息
-            <p slot="content">
-              <Row>
-                <Col span="11">
-                  <FormItem label="上级菜单">
-                    <MenuSelect
-                      :isEdit="isEdit"
-                      v-model="formItem.parentId"></MenuSelect>
-                  </FormItem>
-                </Col>
-                <Col span="11">
-                  <FormItem label="菜单类型" prop="menuType">
-                    <RadioGroup v-model="formItem.menuType">
-                      <Radio label="M" :disabled="!isEdit">菜单</Radio>
-                      <Radio label="P" :disabled="!isEdit">权限</Radio>
-                      <Radio label="B" :disabled="!isEdit">按钮或链接</Radio>
-                    </RadioGroup>
-                  </FormItem>
-                </Col>
-              </Row>
-              <Row>
-                <Col span="11">
-                  <FormItem label="菜单名称" prop='menuName'>
-                    <Input v-model="formItem.menuName" class="form-ele" :maxlength="64" placeholder="请输入菜单名称..." :readonly="!isEdit"></Input>
-                  </FormItem>
-                </Col>
-                <Col span="11">
-                  <FormItem label="菜单内部名" prop='menuCode'>
-                    <Input v-model="formItem.menuCode" class="form-ele" :maxlength="64" placeholder="请输入菜单内部名..." :readonly="!isEdit"></Input>
-                  </FormItem>
-                </Col>
-              </Row>
-              <Row>
-                <Col span="11">
-                  <FormItem label="状态">
-                    <RadioGroup v-model="formItem.status">
-                      <Radio label="0" :disabled="!isEdit">启用</Radio>
-                      <Radio label="2" :disabled="!isEdit">停用</Radio>
-                    </RadioGroup>
-                  </FormItem>
-                </Col>
-                <Col span="11">
-                  <FormItem label="权限标识" prop="perms">
-                    <Input v-model="formItem.perms" class="form-ele" :maxlength="100" placeholder="请输入权限标识..." :readonly="!isEdit"></Input>
-                  </FormItem>
-                </Col>
-              </Row>
-            </p>
-          </Panel>
-          <Panel name="2">
-            前端展示
-            <p slot="content">
-              <Row>
-                <Col span="11">
-                  <FormItem label="菜单显示图标">
-                    <Input v-model="formItem.icon" class="form-ele" :maxlength="100" readonly="readonly">
-                      <Icon :type="formItem.icon" style="cursor: pointer; font-size:20px;" slot="prefix"></Icon>
-                    </Input>
-                  </FormItem>
-                </Col>
-                <Col span="11">
-                  <FormItem label="菜单地址">
-                    <Input v-model="formItem.url" class="form-ele" :maxlength="200" placeholder="请输入菜单地址..." :readonly="!isEdit"></Input>
-                  </FormItem>
-                </Col>
-              </Row>
-              <Row>
-                <Col span="11">
-                  <FormItem label="是否显示菜单">
-                    <RadioGroup v-model="formItem.visible">
-                      <Radio label="T" :disabled="!isEdit">是</Radio>
-                      <Radio label="F" :disabled="!isEdit">否</Radio>
-                    </RadioGroup>
-                  </FormItem>
-                </Col>
-                <Col span="11">
-                  <FormItem label="是否显示目录">
-                    <RadioGroup v-model="formItem.showFolder">
-                      <Radio label="T" :disabled="!isEdit">是</Radio>
-                      <Radio label="F" :disabled="!isEdit">否</Radio>
-                    </RadioGroup>
-                  </FormItem>
-                </Col>
-              </Row>
-              <Row>
-                <Col span="11">
-                  <FormItem label="使用前端缓存">
-                    <RadioGroup v-model="formItem.useCache">
-                      <Radio label="T" :disabled="!isEdit">是</Radio>
-                      <Radio label="F" :disabled="!isEdit">否</Radio>
-                    </RadioGroup>
-                  </FormItem>
-                </Col>
-                <Col span="11">
-                  <FormItem label="显示顺序">
-                    <Input v-model="formItem.displayOrder" class="form-ele" :maxlength="10" placeholder="请输入显示顺序..." :readonly="!isEdit"></Input>
-                  </FormItem>
-                </Col>
-              </Row>
-              <Row>
-                <Col span="22">
-                  <FormItem label="备注">
-                    <Input v-model="formItem.remarks" type="textarea" class="form-ele" :autosize="{minRows: 4,maxRows: 8}" :maxlength="200" placeholder="请输入备注..." :readonly="!isEdit" ></Input>
-                  </FormItem>
-                </Col>
-              </Row>
-            </p>
-          </Panel>
-        </Collapse>
+        <Row>
+          <Col span="11">
+            <FormItem label="上级菜单">
+              <MenuSelect
+                :isEdit="isEdit"
+                v-model="formItem.parentId"></MenuSelect>
+            </FormItem>
+          </Col>
+          <Col span="11">
+            <FormItem label="菜单类型" prop="menuType">
+              <RadioGroup v-model="formItem.menuType">
+                <Radio label="M" :disabled="!isEdit">菜单</Radio>
+                <Radio label="P" :disabled="!isEdit">权限</Radio>
+                <Radio label="B" :disabled="!isEdit">按钮或链接</Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="11">
+            <FormItem label="菜单名称" prop='menuName'>
+              <Input v-model="formItem.menuName" class="form-ele" :maxlength="64" placeholder="请输入菜单名称..." :readonly="!isEdit"></Input>
+            </FormItem>
+          </Col>
+          <Col span="11">
+            <FormItem label="菜单内部名" prop='menuCode'>
+              <Input v-model="formItem.menuCode" class="form-ele" :maxlength="64" placeholder="请输入菜单内部名..." :readonly="!isEdit"></Input>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="11">
+            <FormItem label="状态">
+              <RadioGroup v-model="formItem.status">
+                <Radio label="0" :disabled="!isEdit">启用</Radio>
+                <Radio label="2" :disabled="!isEdit">停用</Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+          <Col span="11">
+            <FormItem label="权限标识" prop="perms">
+              <Input v-model="formItem.perms" class="form-ele" :maxlength="100" placeholder="请输入权限标识..." :readonly="!isEdit"></Input>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="11">
+            <FormItem label="菜单地址">
+              <Input v-model="formItem.url" class="form-ele" :maxlength="200" placeholder="请输入菜单地址..." :readonly="!isEdit"></Input>
+            </FormItem>
+          </Col>
+          <Col span="11">
+            <FormItem label="是否显示菜单">
+              <RadioGroup v-model="formItem.visible">
+                <Radio label="T" :disabled="!isEdit">是</Radio>
+                <Radio label="F" :disabled="!isEdit">否</Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="11">
+            <FormItem label="显示顺序">
+              <Input v-model="formItem.displayOrder" class="form-ele" :maxlength="10" placeholder="请输入显示顺序..." :readonly="!isEdit"></Input>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="22">
+            <FormItem label="备注">
+              <Input v-model="formItem.remarks" type="textarea" class="form-ele" :autosize="{minRows: 4,maxRows: 8}" :maxlength="200" placeholder="请输入备注..." :readonly="!isEdit" ></Input>
+            </FormItem>
+          </Col>
+        </Row>
       </Form>
       <div slot="footer">
         <Button @click="detailsCancel" type="default">取消</Button>

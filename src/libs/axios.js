@@ -51,6 +51,13 @@ class HttpRequest {
     instance.interceptors.response.use(res => {
       this.destroy(url)
       const { data, status } = res
+      if (data && data.errorCode) {
+        if (data.errorCode === 'unauthc') {
+          store.commit('setToken', '')
+          store.commit('setAccess', [])
+          window.location = '/login'
+        }
+      }
       return { data, status }
     }, error => {
       this.destroy(url)
