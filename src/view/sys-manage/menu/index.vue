@@ -23,7 +23,7 @@
             </Select>
             <span class="search-span">状态</span>
             <Select v-model="searchParams.status" class="search-col">
-              <Option value="all">全部</Option>
+              <Option value="all">全部</Option> 
               <Option value="0">启用</Option>
               <Option value="2">停用</Option>
             </Select>
