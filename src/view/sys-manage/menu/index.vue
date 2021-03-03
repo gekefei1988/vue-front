@@ -11,28 +11,28 @@
       </Col>
       <Col span="18" style="width:calc(100% - 285px); margin-left: 5px;">
         <Card :style="bodyHiehgt">
-          <div id="searchGroup" class="search-con search-con-top">
-            <span class="search-span">关键字</span>
-            <Input @on-keydown="handleKeyDown" :maxlength="100" placeholder="菜单名称 或 菜单编号" class="search-input" v-model="searchParams.menuName"/>
-            <span class="search-span">菜单类型</span>
-            <Select v-model="searchParams.menuType" class="search-col">
-              <Option value="all">全部</Option>
-              <Option value="M">菜单</Option>
-              <Option value="P">权限</Option>
-              <Option value="B">按钮或链接</Option>
-            </Select>
-            <span class="search-span">状态</span>
-            <Select v-model="searchParams.status" class="search-col">
-              <Option value="all">全部</Option> 
-              <Option value="0">启用</Option>
-              <Option value="2">停用</Option>
-            </Select>
-            <Button @click="search" class="search-btn" type="primary"><Icon type="md-search"/>&nbsp;查询</Button>
-            <Button @click="handleClear" class="search-btn" type="default"><Icon type="md-refresh"/>&nbsp;重置</Button>
-            <div class="details-btn">
-              <Button @click="editObject('new')" class="add-btn" type="primary"><Icon type="md-add-circle" />&nbsp;新增</Button>
-            </div>
-          </div>
+          <SearchGroup @search="handleSearch" @clear="handleClear">
+            <SearchGroupItem label="关键字">
+              <Input @on-keydown="handleKeyDown" :maxlength="100" placeholder="菜单名称或编号" v-model="searchParams.menuName"/>
+            </SearchGroupItem>
+            <SearchGroupItem label="菜单类型">
+              <Select v-model="searchParams.menuType" clearable clearSingleSelect>
+                <Option value="M">菜单</Option>
+                <Option value="P">权限</Option>
+              </Select>
+            </SearchGroupItem>
+            <SearchGroupItem label="状态" labelWidth="50">
+              <Select v-model="searchParams.status" clearable clearSingleSelect>
+                <Option value="0">启用</Option>
+                <Option value="1">停用</Option>
+              </Select>
+            </SearchGroupItem>
+          </SearchGroup>
+          <Row class="buttons-group">
+            <Col class="right-btns">
+              <Button @click="editObject('new')" class="add-btn" style="margin-bottom: 5px;" type="primary">新增</Button>
+            </Col>
+          </Row>
           <Table border highlight-row stripe :loading="tableLoading" :columns="columns" :max-height="tableHeight" :data="pageContent.content" @on-sort-change="sortChange"></Table>
         </Card>
       </Col>
@@ -41,8 +41,7 @@
     <MenuDetails
       :modalShow="details.modalShow"
       :isEdit="details.isEdit"
-      :objectId="details.objectId"
-      :parentId="details.parentId"
+      :entity="details.entity"
       @on-callback="callback"></MenuDetails>
     <!--新增 修改 查看 ========end==========-->
   </div>
@@ -50,7 +49,7 @@
 <script>
 import MenuTree from './menu-tree'
 import MenuDetails from './menu-details'
-import { list as getList, del } from './menu-api'
+import { list as getList, del, get } from './menu-api'
 import { formatDate } from '@/libs/util'
 export default {
   name: 'sys_menu',
@@ -196,14 +195,14 @@ export default {
       // 查询条件
       searchParams: {
         menuName: '',
-        status: '0',
-        menuType: 'all',
+        status: '',
+        menuType: '',
         parentId: '0'
       },
       // 分页信息
       pageContent: {
+        sortKey: 'display_order',
         content: [],
-        sortKey: 'orderNum',
         sortOrder: 'asc'
       },
       details: {
@@ -261,8 +260,8 @@ export default {
     // 重置按钮
     handleClear () {
       this.searchParams.menuName = ''
-      this.searchParams.status = '0'
-      this.searchParams.menuType = 'all'
+      this.searchParams.status = ''
+      this.searchParams.menuType = ''
       this.search()
     },
     // 查询方法, 重新查询
@@ -290,24 +289,10 @@ export default {
     },
     // 获取查询条件
     getSearchParams () {
-      let params = {
-        menuType: this.searchParams.menuType,
-        menuName: this.searchParams.menuName,
-        parentId: this.searchParams.parentId,
-        sortKey: this.pageContent.sortKey,
-        sortOrder: this.pageContent.sortOrder
+      return {
+        searchParams: this.searchParams,
+        pageContent: this.pageContent
       }
-
-      // 状态
-      if (this.searchParams.status !== 'all') {
-        params.status = this.searchParams.status
-      }
-      // 菜单类型
-      if (this.searchParams.menuType !== 'all') {
-        params.menuType = this.searchParams.menuType
-      }
-
-      return params
     },
     sortChange (sortParams) {
       if (sortParams) {
@@ -318,15 +303,18 @@ export default {
       this.handleSearch()
     },
     editObject (oper, row) {
+      debugger
       if (oper === 'edit') {
         this.details.isEdit = true
-        this.details.objectId = row.id
+        this.details.entity = Object.assign({}, row)
       } else if (oper === 'view') {
         this.details.isEdit = false
-        this.details.objectId = row.id
+        this.details.entity = Object.assign({}, row)
       } else {
+        let menuEntity = Object.assign({}, this.menuModel)
+        menuEntity.parentId = this.searchParams.parentId
+        this.details.entity = menuEntity
         this.details.isEdit = true
-        this.details.parentId = this.searchParams.parentId
       }
       this.details.modalShow = true
     },
@@ -343,13 +331,17 @@ export default {
         this.details.isRefresh = !this.details.isRefresh
         this.search()
       }
-      this.details.objectId = ''
-      this.details.parentId = ''
       this.details.modalShow = false
+      setTimeout(() => {
+        this.details.entity = Object.assign({}, this.menuModel)
+      }, 200)
     }
   },
   mounted () {
     this.search()
+    get().then(res => {
+      this.menuModel = res.data
+    })
   }
 }
 </script>

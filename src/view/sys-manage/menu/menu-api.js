@@ -1,7 +1,8 @@
 import axios from '@/libs/api.request'
+import { formatParams, fmtSearchParams } from '@/libs/util'
 
 export const list = (params) => {
-  let postParams = new URLSearchParams(params)
+  let postParams = fmtSearchParams(params)
   return axios.request({
     method: 'post',
     data: postParams,
@@ -11,7 +12,7 @@ export const list = (params) => {
 
 // 保存
 export const save = (params) => {
-  let postParams = new URLSearchParams(params)
+  let postParams = formatParams(params)
   return axios.request({
     method: 'post',
     data: postParams,

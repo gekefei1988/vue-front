@@ -1,85 +1,73 @@
 <template>
   <div>
-    <Modal
-      :title="details.title"
-      :value="modalShow"
-      width="900"
-      @on-cancel="detailsCancel"
-      :mask-closable="false">
+     <Modal :title="title" :value="modalShow" width="950" @on-cancel="detailsCancel" :mask-closable="false">
       <Form ref="formItem" :model="formItem" :rules="ruleValidate" :label-width="120" class="form-max">
         <Row>
-          <Col span="11">
-            <FormItem label="上级菜单">
-              <MenuSelect
-                :isEdit="isEdit"
-                v-model="formItem.parentId"></MenuSelect>
-            </FormItem>
-          </Col>
-          <Col span="11">
-            <FormItem label="菜单类型" prop="menuType">
-              <RadioGroup v-model="formItem.menuType">
-                <Radio label="M" :disabled="!isEdit">菜单</Radio>
-                <Radio label="P" :disabled="!isEdit">权限</Radio>
-                <Radio label="B" :disabled="!isEdit">按钮或链接</Radio>
-              </RadioGroup>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row>
-          <Col span="11">
-            <FormItem label="菜单名称" prop='menuName'>
-              <Input v-model="formItem.menuName" class="form-ele" :maxlength="64" placeholder="请输入菜单名称..." :readonly="!isEdit"></Input>
-            </FormItem>
-          </Col>
-          <Col span="11">
-            <FormItem label="菜单内部名" prop='menuCode'>
-              <Input v-model="formItem.menuCode" class="form-ele" :maxlength="64" placeholder="请输入菜单内部名..." :readonly="!isEdit"></Input>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row>
-          <Col span="11">
-            <FormItem label="状态">
-              <RadioGroup v-model="formItem.status">
-                <Radio label="0" :disabled="!isEdit">启用</Radio>
-                <Radio label="2" :disabled="!isEdit">停用</Radio>
-              </RadioGroup>
-            </FormItem>
-          </Col>
-          <Col span="11">
-            <FormItem label="权限标识" prop="perms">
-              <Input v-model="formItem.perms" class="form-ele" :maxlength="100" placeholder="请输入权限标识..." :readonly="!isEdit"></Input>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row>
-          <Col span="11">
-            <FormItem label="菜单地址">
-              <Input v-model="formItem.url" class="form-ele" :maxlength="200" placeholder="请输入菜单地址..." :readonly="!isEdit"></Input>
-            </FormItem>
-          </Col>
-          <Col span="11">
-            <FormItem label="是否显示菜单">
-              <RadioGroup v-model="formItem.visible">
-                <Radio label="T" :disabled="!isEdit">是</Radio>
-                <Radio label="F" :disabled="!isEdit">否</Radio>
-              </RadioGroup>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row>
-          <Col span="11">
-            <FormItem label="显示顺序">
-              <Input v-model="formItem.displayOrder" class="form-ele" :maxlength="10" placeholder="请输入显示顺序..." :readonly="!isEdit"></Input>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row>
-          <Col span="22">
-            <FormItem label="备注">
-              <Input v-model="formItem.remarks" type="textarea" class="form-ele" :autosize="{minRows: 4,maxRows: 8}" :maxlength="200" placeholder="请输入备注..." :readonly="!isEdit" ></Input>
-            </FormItem>
-          </Col>
+          <VueFormItem label="上级菜单">
+            <MenuSelect ref="menuSelect" :isEdit="isEdit" v-model="formItem.parentId"></MenuSelect>
+          </VueFormItem>
+          <VueFormItem label="菜单类型" prop="menuType">
+            <RadioGroup v-if="isEdit" v-model="formItem.menuType">
+              <Radio label="M">菜单</Radio>
+              <Radio label="P">权限</Radio>
+            </RadioGroup>
+            <span v-else class="font-weight">{{formItem.menuTypeDesc}}</span>
+          </VueFormItem>
+          <VueFormItem label="菜单名称" prop='menuName'>
+            <Input v-if="isEdit" v-model="formItem.menuName" :maxlength="64" placeholder="请输入菜单名称"></Input>
+            <span v-else class="font-weight">{{formItem.menuName}}</span>
+          </VueFormItem>
+          <VueFormItem label="菜单内部名" prop='menuCode'>
+            <Input v-if="isEdit" v-model="formItem.menuCode" :maxlength="64" placeholder="请输入菜单内部名"></Input>
+            <span v-else class="font-weight">{{formItem.menuCode}}</span>
+          </VueFormItem>
+          <VueFormItem label="状态" prop="status">
+            <i-switch v-if="isEdit" v-model="formItem.status" size="large" true-value="0" false-value="1">
+              <span slot="open">启用</span>
+              <span slot="close">停用</span>
+            </i-switch>
+            <div v-else class="font-weight">
+              <Tag v-if="formItem.status === '0'" color="success">启用</Tag>
+              <Tag v-else color="error">停用</Tag>
+            </div>
+          </VueFormItem>
+          <VueFormItem label="权限标识" prop="perms">
+            <Input v-if="isEdit" v-model="formItem.perms" :maxlength="100" placeholder="请输入权限标识"></Input>
+            <span v-else class="font-weight">{{formItem.perms}}</span>
+          </VueFormItem>
+          <VueFormItem label="菜单显示图标">
+            <Input v-if="isEdit" v-model="formItem.icon" :maxlength="100" readonly="readonly">
+            <Icon :type="formItem.icon" style="cursor: pointer; font-size:20px;" slot="prefix"></Icon>
+            <Icon type="md-image" style="cursor: pointer; font-size:20px;" slot="suffix" @click="iconsClick"></Icon>
+            </Input>
+            <span v-if="!isEdit">
+              <Icon :type="formItem.icon" style="font-size:20px;"></Icon>
+            </span>
+          </VueFormItem>
+          <VueFormItem label="菜单地址">
+           <Input v-if="isEdit" v-model="formItem.url" :maxlength="200" placeholder="请输入菜单地址"></Input>
+           <span v-else class="font-weight">{{formItem.url}}</span>
+          </VueFormItem>
+          <VueFormItem label="是否显示菜单">
+            <i-switch v-if="isEdit" v-model="formItem.visible" true-value="T" false-value="F">
+              <span slot="open">是</span>
+              <span slot="close">否</span>
+            </i-switch>
+            <div v-else class="font-weight">
+              <Tag v-if="formItem.visible === 'T'" color="success">是</Tag>
+              <Tag v-else>否</Tag>
+            </div>
+          </VueFormItem>
+          <VueFormItem label="显示顺序">
+            <Input v-if="isEdit" v-model="formItem.displayOrder" :maxlength="10" placeholder="请输入显示顺序"></Input>
+            <span v-else class="font-weight">{{formItem.displayOrder}}</span>
+          </VueFormItem>
+
+          <VueFormItem label="备注" span="21">
+            <Input v-if="isEdit" v-model="formItem.remarks" type="textarea" :autosize="{minRows: 3,maxRows: 6}"
+             :maxlength="200" placeholder="请输入备注" :readonly="!isEdit"></Input>
+            <span v-else class="font-weight">{{formItem.remarks}}</span>
+          </VueFormItem>
         </Row>
       </Form>
       <div slot="footer">
@@ -87,31 +75,38 @@
         <Button @click="detailsOk" :loading="buttonLoading" v-if="isEdit" type="primary">确定</Button>
       </div>
     </Modal>
+    <IconsModal :modalShow="iconsShow" :selectIcon="selectIcon" @on-select-change="iconsSelected">></IconsModal>
   </div>
 </template>
 
 <script>
 import MenuSelect from '_c/sys/menu/menu-select'
-import { validateOnlyOne, save, get } from './menu-api'
+import IconsModal from '_c/icons/icons-modal'
+import { validateOnlyOne, save } from './menu-api'
 export default {
   name: 'sys_menu_index',
   components: {
-    MenuSelect
+    MenuSelect,
+    IconsModal
   },
   props: {
     modalShow: {
       type: Boolean,
       default: () => false
     },
+    title: {
+      type: String,
+      default: () => '菜单信息'
+    },
     isEdit: {
       type: Boolean,
       default: () => false
     },
-    objectId: {
-      default: () => ''
-    },
-    parentId: {
-      default: () => ''
+    entity: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   },
   data () {
@@ -119,12 +114,8 @@ export default {
       // 菜单树
       treeData: [],
       buttonLoading: false,
-      details: {
-        title: '菜单信息维护',
-        collPanel: '1'
-      },
-      // 表单信息
-      formItem: this.getDefaultObject(),
+      collPanel: '1',
+      formItem: {},
       ruleValidate: {
         menuName: [
           { required: true, message: '请输入菜单名称...', trigger: 'blur' }
@@ -183,24 +174,21 @@ export default {
         callback(errors)
       })
     },
-    // 编辑表格相关操作
-    getDefaultObject () {
-      let obj = {
-        id: '',
-        menuCode: '',
-        menuName: '',
-        menuType: 'M',
-        parentId: '0',
-        visible: 'T',
-        url: '',
-        perms: '',
-        displayOrder: '0',
-        status: '0',
-        remarks: ''
+    // 图标选择事件
+    iconsClick () {
+      this.selectIcon = this.formItem.icon
+      this.iconsShow = true
+    },
+    // 图标回调事件
+    iconsSelected (icon) {
+      if (icon) {
+        this.formItem.icon = icon
       }
-
-      obj.parentId = this.parentId
-      return obj
+      if (this.formItem.icon === '') {
+        this.formItem.icon = 'md-square'
+      }
+      this.iconsShow = false
+      this.selectIcon = ''
     },
     detailsOk () {
       this.$refs['formItem'].validate((valid) => {
@@ -213,7 +201,9 @@ export default {
               this.$Message.success(res.data.msg)
               // 关闭模态框
               this.$emit('on-callback', 'ok')
-              this.closeModal()
+              setTimeout(() => {
+                this.$refs.menuSelect.searchTrees()
+              }, 200)
             } else {
               this.$Message.error(res.data.msg)
             }
@@ -225,38 +215,18 @@ export default {
     },
     detailsCancel () {
       this.$emit('on-callback')
-      this.closeModal()
-    },
-    closeModal () {
-      setTimeout(() => {
-        this.details.collPanel = '1'
-        this.$refs['formItem'].resetFields()
-        this.formItem = this.getDefaultObject()
-      }, 200)
-    },
-    // 查询对象
-    getObject () {
-      if (this.objectId && this.objectId.length > 0) {
-        get({ menuId: this.objectId }).then(res => {
-          if (res.data) {
-            let object = this.getDefaultObject()
-            for (var key in object) {
-              object[key] = res.data[key]
-            }
-            this.formItem = object
-          }
-        })
-      } else {
-        this.formItem = this.getDefaultObject()
-      }
     }
   },
-  mounted () {},
+  mounted () {
+    debugger
+    this.formItem = this.entity
+  },
   watch: {
-    modalShow (newVal, oldVal) {
-      if (newVal) {
-        this.getObject()
-      }
+    entity (newVal, oldVal) {
+      debugger
+      this.formItem = newVal
+      this.collPanel = '1'
+      this.$refs['formItem'].resetFields()
     }
   }
 }

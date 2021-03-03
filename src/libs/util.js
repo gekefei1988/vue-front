@@ -541,3 +541,113 @@ export const formatNumber = (num, pattern) => {
   // 1.去掉开头的逗号（，）和加号（+）；2.结尾的小数点（.)
   return retstr.replace(/^,+/, '').replace(/\.$/, '')
 }
+
+/**
+ * @param params 需要格式化的参数, 主要去掉null和格式化时间
+ * @description 返回 URLSearchParams
+ */
+export const formatParams = (params) => {
+  let postParams = new URLSearchParams()
+
+  if (params != null) {
+    for (let key in params) {
+      if (params[key] != null) {
+        if (params[key] instanceof Date) {
+          postParams.append(key, formatDate(params[key], 'yyyy-MM-dd hh:mm:ss'))
+        } else {
+          postParams.append(key, params[key])
+        }
+      }
+    }
+  }
+
+  return postParams
+}
+
+/**
+ * @param params 需要格式化的参数, 主要去掉null和格式化时间
+ * @description 返回 URLSearchParams
+ */
+export const formatVOParams = (params) => {
+  let postParams = new URLSearchParams()
+
+  if (params != null) {
+    for (let key in params) {
+      if (params[key] != null) {
+        if (params[key] instanceof Date) {
+          postParams.append(key, formatDate(params[key], 'yyyy-MM-dd hh:mm:ss'))
+        } else if (params[key] instanceof Object) {
+          for (let itemKey in params[key]) {
+            if (params[key][itemKey] != null) {
+              if (params[key][itemKey] instanceof Date) {
+                postParams.append(key + '.' + itemKey, formatDate(params[key][itemKey], 'yyyy-MM-dd hh:mm:ss'))
+              } else {
+                postParams.append(key + '.' + itemKey, params[key][itemKey])
+              }
+            }
+          }
+        } else {
+          postParams.append(key, params[key])
+        }
+      }
+    }
+  }
+
+  return postParams
+}
+
+/**
+ * @param params 需要格式化的参数, 主要去掉null和格式化时间,并且格式化查询条件
+ * @description 返回 URLSearchParams
+ */
+export const fmtSearchParams = (params) => {
+  let postParams = new URLSearchParams()
+
+  if (params != null) {
+    // 查询条件
+    let searchParams = params['searchParams']
+    if (searchParams) {
+      for (let searchKey in searchParams) {
+        if (searchParams[searchKey]) {
+          if (searchParams[searchKey] instanceof Date) {
+            postParams.append(searchKey, formatDate(searchParams[searchKey], 'yyyy-MM-dd hh:mm:ss'))
+          } else {
+            postParams.append(searchKey, searchParams[searchKey])
+          }
+        }
+      }
+    }
+    params['searchParams'] = null
+
+    // 分页条件
+    let pageContentParams = params['pageContent']
+    if (pageContentParams) {
+      let pageSize = pageContentParams['pageSize']
+      let pageNumber = pageContentParams['pageNumber']
+      let sortKey = pageContentParams['sortKey']
+      let sortOrder = pageContentParams['sortOrder']
+      let defaultSortKey = pageContentParams['defaultSortKey']
+      let defaultSortOrder = pageContentParams['defaultSortOrder']
+      postParams.append('pageSize', pageSize || 10)
+      postParams.append('pageNumber', pageNumber || 0)
+      postParams.append('sortKey', sortKey || '')
+      postParams.append('sortOrder', sortOrder || '')
+      postParams.append('defaultSortKey', defaultSortKey || '')
+      postParams.append('defaultSortOrder', defaultSortOrder || '')
+    }
+    params['pageContent'] = null
+
+    // 其他条件
+    for (let key in params) {
+      if (params[key] != null) {
+        if (params[key] instanceof Date) {
+          postParams.append(key, formatDate(params[key], 'yyyy-MM-dd hh:mm:ss'))
+        } else {
+          postParams.append(key, params[key])
+        }
+      }
+    }
+  }
+
+  return postParams
+}

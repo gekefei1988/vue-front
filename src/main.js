@@ -15,6 +15,10 @@ import '@/assets/icons/iconfont.css'
 import TreeTable from 'tree-table-vue'
 import VOrgTree from 'v-org-tree'
 import 'v-org-tree/dist/v-org-tree.css'
+
+//自定义控件
+import { SearchGroup, SearchGroupItem } from '@/components/search-group'
+import { VueForm, VueFormItem } from '@/components/form'
 // 实际打包时应该不引入mock
 /* eslint-disable */
 // if (process.env.NODE_ENV !== 'production') require('@/mock')
@@ -24,6 +28,12 @@ Vue.use(iView, {
 })
 Vue.use(TreeTable)
 Vue.use(VOrgTree)
+// form 栏位控件
+Vue.component('VueForm', VueForm)
+Vue.component('VueFormItem', VueFormItem)
+// 查询控件
+Vue.component('SearchGroup', SearchGroup)
+Vue.component('SearchGroupItem', SearchGroupItem)
 /**
  * @description 注册admin内置插件
  */
