@@ -209,8 +209,7 @@ export default {
         isEdit: false,
         modalShow: false,
         isRefresh: true,
-        objectId: '',
-        parentId: ''
+        entity: {},
       },
       ruleValidate: {
         menuName: [
