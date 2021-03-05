@@ -54,29 +54,29 @@ export const otherRouter = [
       }
     ]
   },
-  {
-    name: 'sys_settings',
-    path: '/sys_settings',
-    meta: {
-      hideInMenu: false,
-      notCache: false,
-      showAlways: true,
-      title: '系统设置',
-      icon: 'md-settings',
-    },
-    component: Main,
-    children: [{
-      name: 'sys_menu',
-      path: 'sys_menu',
-      meta: {
-        hideInMenu: false,
-        notCache: false,
-        title: '菜单管理',
-        icon: 'md-menu',
-      },
-      component: () => import('@/view/sys-manage/menu/index.vue')
-    }]
-  },
+  // {
+  //   name: 'sys_settings',
+  //   path: '/sys_settings',
+  //   meta: {
+  //     hideInMenu: false,
+  //     notCache: false,
+  //     showAlways: true,
+  //     title: '系统设置',
+  //     icon: 'md-settings',
+  //   },
+  //   component: Main,
+  //   children: [{
+  //     name: 'sys_menu',
+  //     path: 'sys_menu',
+  //     meta: {
+  //       hideInMenu: false,
+  //       notCache: false,
+  //       title: '菜单管理',
+  //       icon: 'md-menu',
+  //     },
+  //     component: () => import('@/view/sys-manage/menu/index.vue')
+  //   }]
+  // },
   {
     path: '/401',
     name: 'error_401',
