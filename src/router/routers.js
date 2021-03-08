@@ -22,14 +22,41 @@ const baseUrl = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : co
  */
 
 export const otherRouter = [
+  // {
+  //   path: '/login',
+  //   name: 'login',
+  //   meta: {
+  //     title: 'Login - 登录',
+  //     hideInMenu: true
+  //   },
+  //   component: () => import('@/view/login/login.vue')
+  // },
   {
-    path: '/login',
-    name: 'login',
+    path: '/console',
+    name: 'console',
     meta: {
-      title: 'Login - 登录',
-      hideInMenu: true
+      title: '管理端登录',
+      hideInMenu: true,
     },
-    component: () => import('@/view/login/login.vue')
+    component: _import('eip/core/login/login.vue'),
+  },
+  {
+    path: '/supervise',
+    name: 'supervise',
+    meta: {
+      title: '监管端登录',
+      hideInMenu: true,
+    },
+    component: _import('fts/core/supervise/login/login.vue'),
+  },
+  {
+    path: '/company',
+    name: 'company',
+    meta: {
+      title: '企业端登录',
+      hideInMenu: true,
+    },
+    component: _import('fts/core/company/login/login.vue'),
   },
   {
     path: '/',

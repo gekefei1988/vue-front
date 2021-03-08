@@ -12,7 +12,10 @@ const router = new Router({
   routes,
   mode: 'history'
 })
-const LOGIN_PAGE_NAME = 'login'
+// const LOGIN_PAGE_NAME = 'login'
+const LOGIN_PAGE_CONSOLE = 'console' // 管理端登录入口
+const LOGIN_PAGE_SUPERVISE = 'supervise' // 监管端登录入口
+const LOGIN_PAGE_COMPANY = 'company' // 监管端登录入口
 
 const turnTo = (to, access, next) => {
   if (canTurnTo(to.name, access, routes)) next() // 有权限，可访问
