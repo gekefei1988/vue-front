@@ -16,6 +16,7 @@ const router = new Router({
 const LOGIN_PAGE_CONSOLE = 'console' // 管理端登录入口
 const LOGIN_PAGE_SUPERVISE = 'supervise' // 监管端登录入口
 const LOGIN_PAGE_COMPANY = 'company' // 监管端登录入口
+const OTHER_PAGES = ['company', 'console', 'supervise']
 
 const turnTo = (to, access, next) => {
   if (canTurnTo(to.name, access, routes)) next() // 有权限，可访问
@@ -25,22 +26,22 @@ const turnTo = (to, access, next) => {
 router.beforeEach((to, from, next) => {
   iView.LoadingBar.start()
   const token = getToken()
-  if (!token && to.name !== LOGIN_PAGE_NAME) {
-    // 未登录且要跳转的页面不是登录页
-    next({
-      name: LOGIN_PAGE_NAME // 跳转到登录页
-    })
-  } else if (!token && to.name === LOGIN_PAGE_NAME) {
-    // 未登陆且要跳转的页面是登录页
-    next() // 跳转
-  } else if (token && to.name === LOGIN_PAGE_NAME) {
-    // 已登录且要跳转的页面是登录页
-    next({
-      name: homeName // 跳转到homeName页
-    })
+
+  // 如果没有登录, 并且token为空
+  if (!token) {
+    if (OTHER_PAGES.indexOf(to.name) >= 0) {
+      next()
+    } else {
+      console.log("path:" + to.path + "::::name:" + to.name)
+      next({
+        name: LOGIN_PAGE_COMPANY, // 其他地址默认跳转企业端首页
+      })
+    }
   } else {
-    if (store.state.user.hasGetInfo) {
-      turnTo(to, store.state.user.access, next)
+    if (to.name === LOGIN_PAGE_COMPANY || to.name === LOGIN_PAGE_CONSOLE || to.name === LOGIN_PAGE_SUPERVISE) {
+      store.dispatch('removeAuthorities').then(res => {
+        next()
+      })
     } else {
       store.dispatch('getUserInfo').then(user => {
         // 拉取用户信息，通过用户权限和跳转的页面的name来判断是否有权限访问;access必须是一个数组，如：['super_admin'] ['super_admin', 'admin']
@@ -48,7 +49,7 @@ router.beforeEach((to, from, next) => {
       }).catch(() => {
         setToken('')
         next({
-          name: 'login'
+          name: LOGIN_PAGE_COMPANY
         })
       })
     }

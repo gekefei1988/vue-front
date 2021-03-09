@@ -38,7 +38,7 @@ export const otherRouter = [
       title: '管理端登录',
       hideInMenu: true,
     },
-    component: _import('eip/core/login/login.vue'),
+    component: () => import('@/view/login/console/login.vue')
   },
   {
     path: '/supervise',
@@ -47,7 +47,7 @@ export const otherRouter = [
       title: '监管端登录',
       hideInMenu: true,
     },
-    component: _import('fts/core/supervise/login/login.vue'),
+    component: () => import('@/view/login/supervise/login.vue')
   },
   {
     path: '/company',
@@ -56,7 +56,7 @@ export const otherRouter = [
       title: '企业端登录',
       hideInMenu: true,
     },
-    component: _import('fts/core/company/login/login.vue'),
+    component: () => import('@/view/login/company/login.vue')
   },
   {
     path: '/',
