@@ -30,25 +30,20 @@ export default {
     LoginForm
   },
   methods: {
-    ...mapActions(['handleLogin']),
+    ...mapActions(['handleLogin', 'getUserInfo']),
     // 提交表单
     handleSubmit (loginForm) {
       this.handleLogin(loginForm).then(res => {
         if (res.data.success) {
-          const userType = res.data.body.userType
-          if (userType === '9') {
-            this.$config.homeName = 'manageIndex'
-            Cookies.set('homeName', this.$config.homeName)
-            this.$router.push({
-              name: this.$config.homeName
-            })
-          } else {
-            this.$Message.error('当前用户无权限登录')
-          }
+          this.getUserInfo().then(res => {
+            if(res){
+              this.$router.push({
+                name: this.$config.homeName
+              })
+            }
+          })
         } else {
           this.$Message.error(res.data.msg)
-          // 如果开启验证码, 则需要清空验证码
-          this.$refs['loginForm'].handleClearVCode()
         }
       })
     }
