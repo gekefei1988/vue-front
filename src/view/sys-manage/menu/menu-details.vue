@@ -35,6 +35,12 @@
             <Input v-if="isEdit" v-model="formItem.perms" :maxlength="100" placeholder="请输入权限标识"></Input>
             <span v-else class="font-weight">{{formItem.perms}}</span>
           </VueFormItem>
+          <VueFormItem label="菜单权重" prop="weightsValue">
+            <Select v-if="isEdit" v-model="formItem.weightsValue" multiple @on-change="handleChangeWeights">
+              <Option v-for="item in weights" :key="item.key" :value="item.key">{{item.value}}</Option>
+            </Select>
+            <span v-else class="font-weight">{{formItem.weightsDesc}}</span>
+          </VueFormItem>
           <VueFormItem label="菜单显示图标">
             <Input v-if="isEdit" v-model="formItem.icon" :maxlength="100" readonly="readonly">
             <Icon :type="formItem.icon" style="cursor: pointer; font-size:20px;" slot="prefix"></Icon>
@@ -113,6 +119,14 @@ export default {
     return {
       // 菜单树
       treeData: [],
+      // 权重
+      weights: [{
+        key: '1',
+        value: '普通用户'
+      }, {
+        key: '2',
+        value: '超级管理员'
+      }],
       buttonLoading: false,
       collPanel: '1',
       formItem: {},
@@ -189,6 +203,18 @@ export default {
       }
       this.iconsShow = false
       this.selectIcon = ''
+    },
+    // 更改权重后
+    handleChangeWeights (values) {
+      let value = '1'
+      values.forEach((item, index) => {
+        if (index === 0) {
+          value = item
+        } else {
+          value += ',' + item
+        }
+      })
+      this.formItem.weights = value
     },
     detailsOk () {
       this.$refs['formItem'].validate((valid) => {

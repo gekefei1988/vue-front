@@ -1,12 +1,4 @@
-import {
-  getMessage,
-  getContentByMsgId,
-  hasRead,
-  removeReaded,
-  restoreTrash,
-  getUnreadCount
-} from '@/api/user'
-import { login, logout,getUserInfo } from '@/api/login/login-api'
+import { login, logout, getUserInfo } from '@/api/login/login-api'
 import { setToken, getToken } from '@/libs/util'
 
 export default {
@@ -72,15 +64,16 @@ export default {
   },
   actions: {
     // 登录
-    handleLogin ({ commit }, { userName, password }) {
+    handleLogin ({ commit }, { userName, password, isConsoleLogin }) {
       userName = userName.trim()
       return new Promise((resolve, reject) => {
         login({
           userName,
-          password
+          password,
+          isConsoleLogin
         }).then(res => {
           const data = res.data
-          if(data && data.success){
+          if (data && data.success) {
             commit('setToken', data.body.token)
             // 清空tag标签内容
             commit('setTagNavList', [])
@@ -130,7 +123,7 @@ export default {
       })
     },
     // 移除权限
-    removeAuthorities({ state, commit }) {
+    removeAuthorities ({ state, commit }) {
       return new Promise((resolve, reject) => {
         // 赋值为空, 清空token
         commit('setToken', '')
@@ -139,7 +132,7 @@ export default {
         commit('setTagNavList', [])
         resolve()
       })
-    },
+    }
 
   }
 }

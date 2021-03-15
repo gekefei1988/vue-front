@@ -1,9 +1,18 @@
 import axios from '@/libs/api.request'
 
-export const login = (params) => {
+export const login = ({ userName, password, isConsoleLogin }) => {
+  let loginUrl = 'login'
+  if (isConsoleLogin) {
+    loginUrl = 'login-console'
+  }
+  // 设置参数
+  let params = {
+    userName,
+    password
+  }
   let postParams = new URLSearchParams(params)
   return axios.request({
-    url: 'login',
+    url: loginUrl,
     data: postParams,
     method: 'post'
   })
