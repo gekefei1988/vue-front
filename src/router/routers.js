@@ -1,9 +1,9 @@
 import Main from '@/components/main'
-import jquery from 'jquery'
-import parentView from '@/components/parent-view'
-import { filterAsyncRouter } from '@/libs/router-util'
-import config from '@/config'
-const baseUrl = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro
+// import jquery from 'jquery'
+// import parentView from '@/components/parent-view'
+// import { filterAsyncRouter } from '@/libs/router-util'
+// import config from '@/config'
+// const baseUrl = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro
 
 /**
  * iview-admin中meta除了原生参数外可配置的参数:
@@ -36,7 +36,7 @@ export const otherRouter = [
     name: 'console',
     meta: {
       title: '管理端登录',
-      hideInMenu: true,
+      hideInMenu: true
     },
     component: () => import('@/view/login/console/login.vue')
   },
@@ -45,7 +45,7 @@ export const otherRouter = [
     name: 'supervise',
     meta: {
       title: '监管端登录',
-      hideInMenu: true,
+      hideInMenu: true
     },
     component: () => import('@/view/login/supervise/login.vue')
   },
@@ -54,7 +54,7 @@ export const otherRouter = [
     name: 'company',
     meta: {
       title: '企业端登录',
-      hideInMenu: true,
+      hideInMenu: true
     },
     component: () => import('@/view/login/company/login.vue')
   },
@@ -129,16 +129,17 @@ export const otherRouter = [
     component: () => import('@/view/error-page/404.vue')
   }
 ]
-let menuDatas = jquery.ajax({
-  url: baseUrl + '/core/sys/menu/getMenuVOTrees',
-  type: 'post',
-  async: false,
-  dataType: 'json'
-}).responseJSON
+// let menuDatas = jquery.ajax({
+//   url: baseUrl + '/core/sys/menu/getMenuVOTrees',
+//   type: 'post',
+//   async: false,
+//   dataType: 'json'
+// }).responseJSON
 
-let menuDatasApi = filterAsyncRouter(menuDatas)
+// let menuDatasApi = filterAsyncRouter(menuDatas)
 
-//作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
-export const routes = [...menuDatasApi, ...otherRouter]
+// 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
+// export const routes = [...menuDatasApi, ...otherRouter]
+export const routes = [...otherRouter]
 
 export default routes

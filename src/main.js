@@ -15,8 +15,9 @@ import '@/assets/icons/iconfont.css'
 import TreeTable from 'tree-table-vue'
 import VOrgTree from 'v-org-tree'
 import 'v-org-tree/dist/v-org-tree.css'
+import { initRouter } from '@/libs/router-util' // ①新增  引入动态菜单渲染
 
-//自定义控件
+// 自定义控件
 import { SearchGroup, SearchGroupItem } from '@/components/search-group'
 import { VueForm, VueFormItem } from '@/components/form'
 // 实际打包时应该不引入mock
@@ -58,5 +59,8 @@ new Vue({
   router,
   i18n,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  mounted() {
+    initRouter() // 新增 调用方法,动态生成路由,
+  }
 })

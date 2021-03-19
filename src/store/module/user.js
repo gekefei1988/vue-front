@@ -1,5 +1,6 @@
 import { login, logout, getUserInfo } from '@/api/login/login-api'
 import { setToken, getToken } from '@/libs/util'
+import { initRouter } from '@/libs/router-util' // ①新增  引入动态菜单渲染
 
 export default {
   state: {
@@ -77,6 +78,7 @@ export default {
             commit('setToken', data.body.token)
             // 清空tag标签内容
             commit('setTagNavList', [])
+            initRouter()
           }
           resolve(res)
         }).catch(err => {

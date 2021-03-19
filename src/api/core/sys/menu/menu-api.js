@@ -67,3 +67,12 @@ export const getMenuDataList = (params) => {
     url: 'getMenuDataList'
   })
 }
+
+export const getMenuVOTrees = (params) => {
+  let postParams = new URLSearchParams(params)
+  return axios.request({
+    method: 'post',
+    data: postParams,
+    url: '/core/sys/menu/getMenuVOTrees'
+  })
+}

@@ -13,8 +13,9 @@ import {
 } from '@/libs/util'
 import { saveErrorLogger } from '@/api/data'
 import router from '@/router'
-import routers from '@/router/routers'
 import config from '@/config'
+import Router from 'vue-router'
+import routers from '@/router/routers'
 const { homeName } = config
 
 const closePage = (state, route) => {
@@ -39,6 +40,14 @@ export default {
     errorCount: state => state.errorList.length
   },
   mutations: {
+    updateMenuList (state, routes) {
+      const newRouter = new Router({ routes, mode: 'history' })
+      router.matcher = newRouter.matcher // reset router
+      // 添接受前台数组，刷新菜单
+      // router.addRoutes(routes) // 动态添加路由
+      // state.menuList = routes
+      console.log('updateMenuList 添  menuList', routes)
+    },
     setBreadCrumb (state, route) {
       state.breadCrumbList = getBreadCrumbList(route, state.homeRoute)
     },
