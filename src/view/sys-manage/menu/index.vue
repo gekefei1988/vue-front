@@ -29,7 +29,7 @@
             </SearchGroupItem>
           </SearchGroup>
           <Row class="buttons-group">
-            <Col class="right-btns">
+            <Col class="right-btns">  
               <Button @click="editObject('new')" v-if="buttonAccess['sys:menu:save']" class="add-btn" style="margin-bottom: 5px;" type="primary">新增</Button>
             </Col>
           </Row>
