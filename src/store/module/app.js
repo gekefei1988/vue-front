@@ -33,10 +33,13 @@ export default {
     homeRoute: {},
     local: localRead('local'),
     errorList: [],
-    hasReadErrorPage: false
+    hasReadErrorPage: false,
+    menuList:[],
+    addRoutes:[],
   },
   getters: {
-    menuList: (state, getters, rootState) => getMenuByRouter(routers, rootState.user.access),
+    menuList: (state, getters, rootState) => getMenuByRouter(state.menuList, rootState.user.access),
+    addRoutes: state => state.addRoutes,
     errorCount: state => state.errorList.length
   },
   mutations: {
@@ -45,8 +48,13 @@ export default {
       router.matcher = newRouter.matcher // reset router
       // 添接受前台数组，刷新菜单
       // router.addRoutes(routes) // 动态添加路由
-      // state.menuList = routes
+      console.log(router.getRoutes())
+      state.menuList = routes
       console.log('updateMenuList 添  menuList', routes)
+    },
+    getAddRoutes (state, addRoutes) {
+      state.addRoutes = addRoutes
+      console.log('getAddRoutes 新加路由', addRoutes)
     },
     setBreadCrumb (state, route) {
       state.breadCrumbList = getBreadCrumbList(route, state.homeRoute)

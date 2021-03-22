@@ -7,6 +7,7 @@ import { setToken, getToken, canTurnTo, setTitle } from '@/libs/util'
 // import config from '@/config'
 import { dynamicRouterAdd } from '@/libs/router-util'
 // const { homeName } = config
+import { initRouter } from '@/libs/router-util' // ①新增  引入动态菜单渲染
 
 Vue.use(Router)
 const originalPush = Router.prototype.push
@@ -29,6 +30,7 @@ const turnTo = (to, access, next) => {
 }
 
 router.beforeEach((to, from, next) => {
+debugger
   iView.LoadingBar.start()
   const token = getToken()
 
@@ -48,15 +50,23 @@ router.beforeEach((to, from, next) => {
         next()
       })
     } else {
-      store.dispatch('getUserInfo').then(user => {
-        // 拉取用户信息，通过用户权限和跳转的页面的name来判断是否有权限访问;access必须是一个数组，如：['super_admin'] ['super_admin', 'admin']
-        turnTo(to, user.access, next)
-      }).catch(() => {
-        setToken('')
-        next({
-          name: LOGIN_PAGE_COMPANY
+      let routeAdd = dynamicRouterAdd()
+      if (store.getters.addRoutes.length == routeAdd.length) {
+        store.dispatch('getUserInfo').then(user => {
+          // 拉取用户信息，通过用户权限和跳转的页面的name来判断是否有权限访问;access必须是一个数组，如：['super_admin'] ['super_admin', 'admin']
+          turnTo(to, user.access, next)
+        }).catch(() => {
+          setToken('')
+          next({
+            name: LOGIN_PAGE_COMPANY
+          })
         })
-      })
+      }
+      else{
+        router.addRoutes(routeAdd) // 动态添加路由
+        store.commit('getAddRoutes', routeAdd)
+        next({ ...to,replace : true})
+      }
     }
   }
 })

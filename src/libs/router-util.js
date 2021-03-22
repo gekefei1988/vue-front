@@ -8,7 +8,8 @@ import parentView from '@/components/parent-view'
 // import router from '@/router'
 // const _import = require('@/router/_import_' + process.env.NODE_ENV)
 var gotRouter
-export const initRouter = (vm) => {
+export const initRouter = async (vm) => {
+  debugger
   // gotRouter = [...routers]
   // if (getToken()) {
   //   let routerData = []
@@ -30,12 +31,39 @@ export const initRouter = (vm) => {
     return
   }
   gotRouter = [...routers]
-  getMenuVOTrees().then(res => {
+  await getMenuVOTrees().then(res => {
     let routerData = res.data // 后台拿到路由
     localSave('dynamicRouter', JSON.stringify(routerData)) // 存储路由到localStorage
+    let routeError = [
+      {
+        path: '/401',
+        name: 'error_401',
+        meta: {
+          hideInMenu: true
+        },
+        component: () => import('@/view/error-page/401.vue')
+      },
+      {
+        path: '/500',
+        name: 'error_500',
+        meta: {
+          hideInMenu: true
+        },
+        component: () => import('@/view/error-page/500.vue')
+      },
+      {
+        path: '*',
+        name: 'error_404',
+        meta: {
+          hideInMenu: true
+        },
+        component: () => import('@/view/error-page/404.vue')
+      }
+    ]
     // 过滤路由,路由组件转换
-    gotRouter.push(...filterAsyncRouter(routerData))
+    gotRouter.push(...filterAsyncRouter(routerData),...routeError)
     store.commit('updateMenuList', gotRouter)
+    store.commit('getAddRoutes', routerData)
   })
   return gotRouter
 }
