@@ -29,8 +29,7 @@
             </SearchGroupItem>
           </SearchGroup>
           <Row class="buttons-group">
-            <Col class="right-btns">  
-              <Button @click="editObject('new')" v-if="buttonAccess['sys:menu:save']" class="add-btn" style="margin-bottom: 5px;" type="primary">新增</Button>
+            <Col class="right-btns">              <Button @click="editObject('new')" v-if="buttonAccess['sys:menu:save']" class="add-btn" style="margin-bottom: 5px;" type="primary">新增</Button>
             </Col>
           </Row>
           <Table border highlight-row stripe :loading="tableLoading" :columns="columns" :max-height="tableHeight" :data="pageContent.content" @on-sort-change="sortChange"></Table>
@@ -51,6 +50,7 @@ import MenuTree from './menu-tree'
 import MenuDetails from './menu-details'
 import { list as getList, del, get } from './menu-api'
 import { formatDate } from '@/libs/util'
+import { accessCheck } from '@/api/open-api/sys/api'
 export default {
   name: 'sys_menu',
   components: {
@@ -59,6 +59,10 @@ export default {
   },
   data () {
     return {
+      buttonAccess: {
+        'sys:menu:save': false,
+        'sys:menu:delete': false
+      },
       columns: [
         {
           title: '菜单名称',
@@ -143,19 +147,21 @@ export default {
           minWidth: 160,
           render: (h, params) => {
             let buttons = []
-            buttons.push(
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                on: {
-                  click: () => {
-                    this.editObject('edit', params.row)
+            if (this.buttonAccess['sys:menu:save']) {
+              buttons.push(
+                h('Button', {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  on: {
+                    click: () => {
+                      this.editObject('edit', params.row)
+                    }
                   }
-                }
-              }, '编辑')
-            )
+                }, '编辑')
+              )
+            }
             // 增加下级按钮
             buttons.push(
               h('Button', {
@@ -172,20 +178,22 @@ export default {
               }, '查看')
             )
             // 增加删除按钮
-            buttons.push(
-              h('Button', {
-                props: {
-                  type: 'error',
-                  size: 'small'
-                },
-                style: 'margin-left:5px',
-                on: {
-                  click: () => {
-                    this.handleDelete(params.row.id)
+            if (this.buttonAccess['sys:menu:delete']) {
+              buttons.push(
+                h('Button', {
+                  props: {
+                    type: 'error',
+                    size: 'small'
+                  },
+                  style: 'margin-left:5px',
+                  on: {
+                    click: () => {
+                      this.handleDelete(params.row.id)
+                    }
                   }
-                }
-              }, '删除')
-            )
+                }, '删除')
+              )
+            }
             return h('div', buttons)
           }
         }
@@ -209,8 +217,7 @@ export default {
         isEdit: false,
         modalShow: false,
         isRefresh: true,
-        entity: {},
-      },
+        entity: {} },
       ruleValidate: {
         menuName: [
           { required: true, message: '请输入菜单名称...', trigger: 'blur' }
@@ -334,10 +341,21 @@ export default {
       setTimeout(() => {
         this.details.entity = Object.assign({}, this.menuModel)
       }, 200)
+    },
+    // 获取权控按钮
+    loadButtonsAccess () {
+      let params = []
+      for (let key in this.buttonAccess) {
+        params.push(key)
+      }
+      accessCheck({ accessCodes: params.toString(',') }).then(res => {
+        this.buttonAccess = res.data
+      })
     }
   },
   mounted () {
     this.search()
+    this.loadButtonsAccess()
     get().then(res => {
       this.menuModel = res.data
     })
