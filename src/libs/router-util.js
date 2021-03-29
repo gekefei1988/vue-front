@@ -9,7 +9,6 @@ import parentView from '@/components/parent-view'
 // const _import = require('@/router/_import_' + process.env.NODE_ENV)
 var gotRouter
 export const initRouter = async (vm) => {
-  debugger
   // gotRouter = [...routers]
   // if (getToken()) {
   //   let routerData = []
@@ -61,7 +60,7 @@ export const initRouter = async (vm) => {
       }
     ]
     // 过滤路由,路由组件转换
-    gotRouter.push(...filterAsyncRouter(routerData),...routeError)
+    gotRouter.push(...filterAsyncRouter(routerData), ...routeError)
     store.commit('updateMenuList', gotRouter)
     store.commit('getAddRoutes', routerData)
   })

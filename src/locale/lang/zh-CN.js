@@ -46,5 +46,7 @@ export default {
   // 菜单
   sys_settings: '系统设置',
   sys_menu: '菜单管理',
-  sys_orgs: '组织管理'
+  sys_orgs: '组织管理',
+  sys_tenant_manage: '机构审核管理',
+  sys_tenant: '机构管理'
 }
