@@ -48,5 +48,6 @@ export default {
   sys_menu: '菜单管理',
   sys_orgs: '组织管理',
   sys_tenant_manage: '机构审核管理',
-  sys_tenant: '机构管理'
+  sys_tenant: '机构管理',
+  sys_dict: '字典管理'
 }
