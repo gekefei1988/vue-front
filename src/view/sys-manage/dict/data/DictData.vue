@@ -85,7 +85,7 @@ export default {
         },
         {
           title: '显示顺序',
-          key: 'displayOrder',
+          key: 'display_order',
           width: 120,
           align: 'right'
         },

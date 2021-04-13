@@ -1,13 +1,11 @@
 import axios from '@/libs/api.request'
-import { getToken } from '@/libs/util.js'
+import { getToken, fmtSearchParams } from '@/libs/util'
 
 /**
  *  获取字典类型信息.
  */
 export async function typeList (params) {
-  let postParams = Object.assign({}, params.searchParams)
-  Object.assign(postParams, params.pageContent)
-  delete postParams.content
+  let postParams = fmtSearchParams(params)
   return axios.request({
     method: 'post',
     data: postParams,

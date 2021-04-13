@@ -58,7 +58,7 @@ export default {
         total: 0,
         pageNumber: 1,
         pageSize: 10,
-        sortKey: 'updateDate',
+        sortKey: 'update_date',
         sortOrder: 'desc',
         defaultSortKey: '',
         defaultSortOrder: ''
@@ -114,12 +114,8 @@ export default {
     handleSearch () {
       this.loading = true
       typeList({ searchParams: this.searchParams, pageContent: this.pageContent }).then(res => {
-        if (res.data.success) {
-          this.pageContent = res.data.body
-          this.contextRow = null
-        } else {
-          this.$Message.error(res.data.msg)
-        }
+        this.pageContent = res.data
+        this.contextRow = null
         this.loading = false
       })
     },

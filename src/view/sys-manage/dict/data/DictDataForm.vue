@@ -20,30 +20,8 @@
           <span slot="close">否</span>
         </i-switch>
       </VueFormItem>
-      <VueFormItem label="Icon图标名称">
-        <Input v-model="formItem.icon" :maxlength="100" placeholder="请输入Icon图标名称"></Input>
-      </VueFormItem>
       <VueFormItem label="显示顺序">
         <Input v-model="formItem.displayOrder" type="number" :maxlength="32" placeholder="请输入显示顺序"></Input>
-      </VueFormItem>
-      <Divider orientation="left">扩展信息</Divider>
-      <VueFormItem label="扩展 1">
-        <Input v-model="formItem.ext1" :maxlength="200" placeholder="请输入扩展 1"></Input>
-      </VueFormItem>
-      <VueFormItem label="扩展 2">
-        <Input v-model="formItem.ext2" :maxlength="200" placeholder="请输入扩展 2"></Input>
-      </VueFormItem>
-      <VueFormItem label="扩展 3">
-        <Input v-model="formItem.ext3" :maxlength="200" placeholder="请输入扩展 3"></Input>
-      </VueFormItem>
-      <VueFormItem label="扩展 4">
-        <Input v-model="formItem.ext4" :maxlength="200" placeholder="请输入扩展 4"></Input>
-      </VueFormItem>
-      <VueFormItem label="扩展 5">
-        <Input v-model="formItem.ext5" :maxlength="200" placeholder="请输入扩展 5"></Input>
-      </VueFormItem>
-      <VueFormItem label="扩展 6">
-        <Input v-model="formItem.ext6" :maxlength="200" placeholder="请输入扩展 6"></Input>
       </VueFormItem>
     </VueForm>
   </div>
