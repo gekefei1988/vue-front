@@ -11,18 +11,21 @@
           <Button type="default" icon="md-refresh" @click="handleClear"></Button>
         </Col>
       </Row>
-      <Table ref="dictTypeTable" row-key="id" :loading="loading" highlight-row stripe
-        context-menu show-context-menu @on-contextmenu="handleContextMenu"
+      <Table ref="dictTypeTable" :loading="loading" highlight-row stripe
         :columns="columns" :data="pageContent.content" border @on-sort-change="handleSortChange"
         @on-row-click="handleSelect" @on-cell-click="handleCellSelect" style="margin-top: 10px;">
         <template slot-scope="{ row }" slot="dictName">
           <font v-if="row.status === '0'">{{row.dictName}}</font>
           <font v-else color="red">{{row.dictName}}</font>
         </template>
-        <template slot="contextMenu">
+        <template slot-scope="{ row }" slot="action">
+          <Button type="primary" size="small" @click="typeForm.handleEdit(row)" class="table-row-btn">编辑</Button>
+          <Button type="error" size="small" @click="handleDelete(row)" class="table-row-btn">删除</Button>
+        </template>
+       <!-- <template slot="contextMenu">
           <DropdownItem @click.native="typeForm.handleEdit">编辑</DropdownItem>
           <DropdownItem @click.native="handleDelete" style="color: #ed4014">删除</DropdownItem>
-        </template>
+        </template> -->
       </Table>
       <div style="margin-top: 5px; text-align: right;">
         <Page :total="pageContent.total" show-total @on-change="handlePageChange"/>
@@ -72,7 +75,12 @@ export default {
           minWidth: 180,
           slot: 'dictName'
         },
-        { title: '字典类型', key: 'dictType', sortable: 'custom', width: 200, tooltip: true }
+        { title: '字典类型', key: 'dictType', sortable: 'custom', width: 200, tooltip: true },
+        { title: '操作',
+          minWidth: 180,
+          key: 'id',
+          slot: 'action'
+        }
       ],
       // 选中行
       contextRow: null,
@@ -85,10 +93,11 @@ export default {
           this.typeForm.title = '新增字典类型'
           this.typeForm.modalShow = true
         },
-        handleEdit: () => {
+        handleEdit: (row) => {
+          debugger
           this.typeForm.title = '编辑字典类型'
           this.typeForm.modalShow = true
-          this.$refs['typeForm'].handleLoadTypeForm(this.contextRow.id)
+          this.$refs['typeForm'].handleLoadTypeForm(row.id)
         },
         // 提交表单
         handleSubmit: () => {
@@ -125,24 +134,23 @@ export default {
       this.handleSearch()
       this.pageContent.pageNumber = 1
     },
-    handleContextMenu (row) {
-      this.contextRow = row
-    },
     // 删除
-    handleDelete () {
-      this.$Modal.confirm({
-        title: '删除确认',
-        content: '您确定要删除字典类型<font color="red">[' + this.contextRow.dictName + ']</font>吗?',
-        onOk: () => {
-          typeDeleteById(this.contextRow.id).then(res => {
-            if (!res.data.success) {
-              this.$Message.error(res.data.msg)
-            } else {
-              this.handleSearch()
-            }
-          })
-        }
-      })
+    handleDelete (row) {
+      if (row) {
+        this.$Modal.confirm({
+          title: '删除确认',
+          content: '您确定要删除字典类型<font color="red">[' + row.dictName + ']</font>吗?',
+          onOk: () => {
+            typeDeleteById(row.id).then(res => {
+              if (!res.data.success) {
+                this.$Message.error(res.data.msg)
+              } else {
+                this.handleSearch()
+              }
+            })
+          }
+        })
+      }
     },
     // 选中
     handleSelect (item) {

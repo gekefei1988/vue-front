@@ -22,20 +22,20 @@
 </template>
 
 <script>
-import { typeGet, typeSave, typeOnlyOne } from '@/api/core/sys/dict/dict.js'
+import { typeGet, typeSave } from '@/api/core/sys/dict/dict.js'
 export default {
   name: 'DictTypeForm',
   computed: {
     rules () {
       return {
         dictName: [
-          { required: true, message: '请输入字典名称', trigger: 'blur' },
-          { validator: this.validator, trigger: 'blur' }
+          { required: true, message: '请输入字典名称', trigger: 'blur' }
+          // { validator: this.validator, trigger: 'blur' }
         ],
         dictType: [
           { required: true, message: '请输入类型名称', trigger: 'blur' },
-          { validator: this.validatorEN, trigger: 'blur' },
-          { validator: this.validator, trigger: 'blur' }
+          { validator: this.validatorEN, trigger: 'blur' }
+          // { validator: this.validator, trigger: 'blur' }
         ],
         status: [
           { required: true, message: '请选择状态', trigger: 'blur' }
@@ -66,18 +66,18 @@ export default {
     },
     // 验证
     validator (rule, value, callback, source, options) {
-      const errors = []
-      let params = {
-        propName: rule.field,
-        propValue: value,
-        id: this.formItem.id
-      }
-      typeOnlyOne(params).then(res => {
-        if (!res.data.success) {
-          errors.push(res.data.msg)
-        }
-        callback(errors)
-      })
+      // const errors = []
+      // let params = {
+      //   propName: rule.field,
+      //   propValue: value,
+      //   id: this.formItem.id
+      // }
+      // typeOnlyOne(params).then(res => {
+      //   if (!res.data.success) {
+      //     errors.push(res.data.msg)
+      //   }
+      //   callback(errors)
+      // })
     },
     handleLoadTypeForm (id) {
       if (id) {

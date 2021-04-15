@@ -9,7 +9,7 @@
         <Button type="default" @click="batchDictData.handleNew">批量新增</Button>
       </ButtonGroup>
       <div style="margin-top: 10px; clear: both;">
-        <Table ref="dictDataTable" row-key="id" :loading="loading" :columns="columns" :data="dataList" border stripe>
+        <Table ref="dictDataTable" :loading="loading" :columns="columns" :data="dataList" border stripe>
           <template slot-scope="{ row }" slot="status">
             <Badge v-if="row.status === '0'" color="green" text="启用"/>
             <Badge v-else color="red" text="停用"/>

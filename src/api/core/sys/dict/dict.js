@@ -1,5 +1,5 @@
 import axios from '@/libs/api.request'
-import { getToken, fmtSearchParams } from '@/libs/util'
+import { getToken, fmtSearchParams, formatParams } from '@/libs/util'
 
 /**
  *  获取字典类型信息.
@@ -31,7 +31,7 @@ export const typeDeleteById = (id) => {
 export const typeGet = (id) => {
   return axios.request({
     method: 'get',
-    url: '/core/sys/dict-data/get' + '?id=' + id
+    url: '/core/sys/dict-type/get' + '?id=' + id
   })
 }
 
@@ -40,26 +40,27 @@ export const typeGet = (id) => {
  * params dict type对象
  */
 export const typeSave = (params) => {
+  let postParams = formatParams(params)
   return axios.request({
     method: 'post',
-    data: params,
-    url: '/core/sys/dict-data/save'
+    data: postParams,
+    url: '/core/sys/dict-type/save'
   })
 }
 
-/**
- * 验证唯一性.
- * propName
- * propValue
- * id
- */
-export const typeOnlyOne = (params) => {
-  return axios.request({
-    method: 'post',
-    data: params,
-    url: '/core/sys/dict-type/onlyOne'
-  })
-}
+// /**
+//  * 验证唯一性.
+//  * propName
+//  * propValue
+//  * id
+//  */
+// export const typeOnlyOne = (params) => {
+//   return axios.request({
+//     method: 'post',
+//     data: params,
+//     url: '/core/sys/dict-type/onlyOne'
+//   })
+// }
 
 /**
  * 删除信息.
@@ -88,9 +89,10 @@ export const dataGet = (id) => {
  * params data 对象
  */
 export const dataSave = (params) => {
+  let postParams = formatParams(params)
   return axios.request({
     method: 'post',
-    data: params,
+    data: postParams,
     url: '/core/sys/dict-data/save'
   })
 }
@@ -99,9 +101,10 @@ export const dataSave = (params) => {
  *  获取字典类型信息.
  */
 export async function dataListTree (params) {
+  let postParams = fmtSearchParams(params)
   return axios.request({
     method: 'post',
-    data: params,
+    data: postParams,
     url: '/core/sys/dict-data/listTreeDictData'
   })
 }
