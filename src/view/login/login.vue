@@ -31,7 +31,7 @@ export default {
       this.handleLogin({ userName, password }).then(res => {
         if (res.data.success) {
           this.getUserInfo().then(res => {
-            if(res){
+            if (res) {
               this.$router.push({
                 name: this.$config.homeName
               })

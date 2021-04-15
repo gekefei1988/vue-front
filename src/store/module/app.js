@@ -15,7 +15,6 @@ import { saveErrorLogger } from '@/api/data'
 import router from '@/router'
 import config from '@/config'
 import Router from 'vue-router'
-import routers from '@/router/routers'
 const { homeName } = config
 
 const closePage = (state, route) => {
@@ -34,8 +33,8 @@ export default {
     local: localRead('local'),
     errorList: [],
     hasReadErrorPage: false,
-    menuList:[],
-    addRoutes:[],
+    menuList: [],
+    addRoutes: []
   },
   getters: {
     menuList: (state, getters, rootState) => getMenuByRouter(state.menuList, rootState.user.access),

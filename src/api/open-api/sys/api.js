@@ -1,5 +1,4 @@
 import axios from '@/libs/api.request'
-import { formatParams } from '@/libs/util'
 
 // 权限验证
 export const accessCheck = (params) => {
