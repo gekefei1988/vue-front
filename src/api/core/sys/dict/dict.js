@@ -48,19 +48,20 @@ export const typeSave = (params) => {
   })
 }
 
-// /**
-//  * 验证唯一性.
-//  * propName
-//  * propValue
-//  * id
-//  */
-// export const typeOnlyOne = (params) => {
-//   return axios.request({
-//     method: 'post',
-//     data: params,
-//     url: '/core/sys/dict-type/onlyOne'
-//   })
-// }
+/**
+ * 验证唯一性.
+ * propName
+ * propValue
+ * id
+ */
+export const typeOnlyOne = (params) => {
+  let postParams = fmtSearchParams(params)
+  return axios.request({
+    method: 'post',
+    data: postParams,
+    url: '/core/sys/dict-type/onlyOne'
+  })
+}
 
 /**
  * 删除信息.
