@@ -18,6 +18,7 @@ import 'v-org-tree/dist/v-org-tree.css'
 import { initRouter } from '@/libs/router-util' // ①新增  引入动态菜单渲染
 
 // 自定义控件
+import VTablePage from '@/components/tables/v-table-page.vue'
 import { SearchGroup, SearchGroupItem } from '@/components/search-group'
 import { VueForm, VueFormItem } from '@/components/form'
 // 实际打包时应该不引入mock
@@ -29,6 +30,8 @@ Vue.use(iView, {
 })
 Vue.use(TreeTable)
 Vue.use(VOrgTree)
+// 表格控件
+Vue.component('VTablePage', VTablePage)
 // form 栏位控件
 Vue.component('VueForm', VueForm)
 Vue.component('VueFormItem', VueFormItem)

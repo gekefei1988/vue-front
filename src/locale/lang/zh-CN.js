@@ -49,5 +49,6 @@ export default {
   sys_orgs: '组织管理',
   sys_tenant_manage: '机构审核管理',
   sys_tenant: '机构管理',
-  sys_dict: '字典管理'
+  sys_dict: '字典管理',
+  sys_area: '行政区划'
 }
