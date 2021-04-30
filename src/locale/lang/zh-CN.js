@@ -50,5 +50,6 @@ export default {
   sys_tenant_manage: '机构审核管理',
   sys_tenant: '机构管理',
   sys_dict: '字典管理',
-  sys_area: '行政区划'
+  sys_area: '行政区划',
+  sys_cache: '系统缓存'
 }

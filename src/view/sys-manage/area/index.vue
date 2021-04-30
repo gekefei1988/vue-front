@@ -46,7 +46,7 @@ import TableTag from '@/components/table-tag'
 import AreaForm from './area-form.vue'
 import { list, del } from '@/api/core/sys/area/area-api'
 import { formatDate } from '@/libs/util'
-import { accessCheck } from '@/api/open-api/sys/api'
+import { getAccess } from '@/api/open-api/sys/api'
 export default {
   name: 'sys_area',
   components: {
@@ -352,11 +352,7 @@ export default {
     },
     // 获取权控按钮
     loadButtonsAccess () {
-      let params = []
-      for (let key in this.buttonAccess) {
-        params.push(key)
-      }
-      accessCheck({ accessCodes: params.toString(',') }).then(res => {
+      getAccess(this.buttonAccess).then(res => {
         this.buttonAccess = res.data
       })
     }
